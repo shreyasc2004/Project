@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+    <style>
+        /* Add basic styles for dark mode */
+        body.dark-mode {
+            background-color: #000000; /* Black background for dark mode */
+            color: #e0e0e0; /* Light text color */
+        }
+        .dark-mode .table {
+            background-color: #121212; /* Dark background for the table */
+            color: #e0e0e0; /* Light text color for the table */
+        }
+        .dark-mode .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #1e1e1e; /* Slightly lighter background for odd rows */
+        }
+        .dark-mode .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .dark-mode .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .dark-mode .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .dark-mode .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+        .dark-mode .form-control {
+            background-color: #1e1e1e; /* Dark background for form inputs */
+            color: #e0e0e0; /* Light text color for form inputs */
+            border-color: #333333; /* Dark border color for form inputs */
+        }
+    </style>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='images/expense-manager-22.png') }}" alt="Your Logo" class="logo">
+    <div class="container">
+        <h2>Welcome, {{ session['name'] }}!</h2>
+        <button id="theme-toggle" class="btn btn-info">Toggle Dark Mode</button>
+        <a href="{{ url_for('add_expense_route') }}" class="btn btn-primary">Add My Expense</a>
+        <a href="{{ url_for('auto_add_expense_route') }}" class="btn btn-secondary">Auto Feed Expense</a>
+        <a href="/logout" class="btn btn-danger">Logout</a>
+        
+        <h3>Your Expenses</h3>
+        <table class="table table-striped table-dark">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Purpose</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense['date'] }}</td>
+                    <td>{{ expense['purpose'] }}</td>
+                    <td>{{ expense['amount'] }}</td>
+                    <td>
+                        <!-- Edit Form -->
+                        <form action="{{ url_for('update_expense') }}" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="{{ expense['id'] }}">
+                            <div class="form-group">
+                                <label for="edit-date-{{ expense['id'] }}">Date:</label>
+                                <input type="date" class="form-control" id="edit-date-{{ expense['id'] }}" name="date" value="{{ expense['date'] }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-purpose-{{ expense['id'] }}">Purpose:</label>
+                                <input type="text" class="form-control" id="edit-purpose-{{ expense['id'] }}" name="purpose" value="{{ expense['purpose'] }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-amount-{{ expense['id'] }}">Amount:</label>
+                                <input type="number" class="form-control" id="edit-amount-{{ expense['id'] }}" name="amount" step="0.01" value="{{ expense['amount'] }}" required>
+                            </div>
+                            <button type="submit" class="btn btn-warning btn-sm">Save</button>
+                        </form>
+
+                        <!-- Delete Form -->
+                        <form action="{{ url_for('delete_expense') }}" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="{{ expense['id'] }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"></script>
+    <script>
+        // JavaScript for dark mode toggle
+        const themeToggleButton = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme');
+
+        // Apply the saved theme on page load
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        themeToggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            // Save the theme choice in local storage
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.removeItem('theme');
+            }
+        });
+    </script>
+</body>
+</html>

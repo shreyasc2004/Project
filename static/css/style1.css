@@ -1,0 +1,48 @@
+body {
+    font-family: "Comic Sans MS", sans-serif;
+    background: linear-gradient(to right, #0d622b, #cfd6ee);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.container {
+    text-align: center;
+    background: white;
+    border: 2px solid #000;
+    padding: 40px;
+    box-shadow: 10px 10px 0 #000;
+}
+.logo {
+    max-width: 250px;
+    height: auto;
+    margin-bottom: 20px;
+}
+h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+ul li {
+    margin-bottom: 10px;
+}
+ul li a {
+    font-size: 18px;
+    color: #007bff;
+    text-decoration: none;
+}
+ul li a:hover {
+    text-decoration: underline;
+}
+.credits {
+    margin-top: 20px;
+    font-size: 16px;
+}
